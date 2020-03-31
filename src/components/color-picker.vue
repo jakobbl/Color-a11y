@@ -34,7 +34,7 @@
 
 <script>
 import rangeSlider from "./range-slider";
-import convert from "color-convert";
+import { hsluvToHex, hexToHsluv } from "hsluv";
 
 export default {
   name: "color-picker",
@@ -49,12 +49,10 @@ export default {
       hex: "#000"
     };
   },
-  computed: {},
   methods: {
     dot() {
-      const hsl = `hsl(${this.hue},${this.saturation}%,${this.lightness}%)`;
       return {
-        background: hsl
+        background: this.hex
       };
     },
     setHue(event) {
@@ -71,15 +69,20 @@ export default {
     },
     updateHex() {
       const hsl = [this.hue, this.saturation, this.lightness];
-      const hex = convert.hsl.hex(hsl);
-      this.hex = "#" + hex;
+      const hex = hsluvToHex(hsl);
+      this.hex = hex;
     },
     updateHSL(event) {
-      const hsl = convert.hex.hsl(event.target.value);
+      const hsl = hexToHsluv(event.target.value);
       this.hex = event.target.value;
       this.hue = hsl[0];
       this.saturation = hsl[1];
       this.lightness = hsl[2];
+    }
+  },
+  watch: {
+    hex() {
+      this.$emit("input", this.hex);
     }
   }
 };

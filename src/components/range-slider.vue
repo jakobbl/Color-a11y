@@ -22,7 +22,6 @@ export default {
   },
   methods: {
     handleInput(event) {
-      this.value = parseInt(event.target.value);
       this.$emit("input", parseInt(event.target.value));
     }
   }
