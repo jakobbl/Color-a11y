@@ -1,43 +1,49 @@
 <template>
-  <div class="colorPicker">
-    <div class="colorPicker_dot" :style="dot()"></div>
+  <div class="color-picker">
     <input
       type="text"
       pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
-      class="colorPicker_hex"
+      class="color-picker_hex"
       :value="hex"
-      @input="updateHSL"
+      @input="updateHSL($event.target.value)"
     />
+    <div class="flex-breaker" />
     <range-slider
       :max="360"
       title="Hue"
       suffix="°"
-      :value="hue"
+      :value="rounded(hue)"
       @input="setHue"
+      class="color-picker_slider"
     />
     <range-slider
       :max="100"
       title="Saturation"
       suffix="%"
-      :value="saturation"
+      :value="rounded(saturation)"
       @input="setSaturation"
+      class="color-picker_slider"
     />
     <range-slider
       :max="100"
       title="Lightness"
       suffix="%"
-      :value="lightness"
+      :value="rounded(lightness)"
       @input="setLightness"
+      class="color-picker_slider"
     />
   </div>
 </template>
 
 <script>
-import rangeSlider from "./range-slider";
-import { hsluvToHex, hexToHsluv } from "hsluv";
+import { hsluvToHex, hexToHsluv } from 'hsluv';
+import convert from 'color-convert';
+
+import { twoDecimals } from '@/utils';
+import rangeSlider from '@/components/range-slider';
 
 export default {
-  name: "color-picker",
+  name: 'color-picker',
   components: {
     rangeSlider
   },
@@ -45,16 +51,11 @@ export default {
     return {
       hue: 0,
       saturation: 0,
-      lightness: 0,
-      hex: "#000"
+      lightness: 87,
+      hex: null
     };
   },
   methods: {
-    dot() {
-      return {
-        background: this.hex
-      };
-    },
     setHue(event) {
       this.hue = event;
       this.updateHex();
@@ -72,32 +73,71 @@ export default {
       const hex = hsluvToHex(hsl);
       this.hex = hex;
     },
-    updateHSL(event) {
-      const hsl = hexToHsluv(event.target.value);
-      this.hex = event.target.value;
+    updateHSL(hex) {
+      const hsl = hexToHsluv(hex);
+      this.hex = hex;
       this.hue = hsl[0];
       this.saturation = hsl[1];
       this.lightness = hsl[2];
+    },
+    rounded(value) {
+      return twoDecimals(value);
+    },
+    setTo(hex) {
+      this.updateHSL(hex);
+      this.hex = hex;
     }
   },
   watch: {
     hex() {
-      this.$emit("input", this.hex);
+      const rgb = convert.hex.rgb(this.hex);
+      this.$emit('input', { hex: this.hex, rgb });
     }
+  },
+  mounted() {
+    this.updateHex();
   }
 };
 </script>
 
 <style lang="scss">
-.colorPicker {
+@import '@/scss/global';
+
+.color-picker {
+  text-align: center;
+
   &_hex {
+    @include montserrat;
+    width: 9ch;
+    margin-bottom: 3vmin;
+    padding: 0.25em 0.5em;
+
+    color: var(--color);
+    font-size: 1.5rem;
+    text-align: center;
+
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid var(--color);
+
+    transition: color 1s ease-in-out, border-color 1s ease-in-out;
+
     &:invalid {
-      color: red;
+      color: #f00;
     }
   }
-  &_dot {
-    width: 10vmin;
-    height: 10vmin;
+
+  &_slider {
+    width: 45vw;
+    margin-right: auto;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+
+    color: currentColor;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 }
 </style>
