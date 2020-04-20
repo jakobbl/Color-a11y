@@ -14,6 +14,7 @@
           :color="box.color"
           :active="box.active"
           @click.native="selectColorBox(index)"
+          @remove="removeColorBox(index)"
           class="app_colorBox"
           :class="{
             '--faded': shouldFadeOut(box.active),
@@ -90,6 +91,14 @@ export default {
           this.activeColorBox = this.colorBoxes.length - 1;
           this.$refs.colorPicker.setTo(newColor);
         }, 125);
+      });
+    },
+    removeColorBox(index) {
+      this.activeColorBox = -1;
+      this.$refs.colorPicker.setTo(this.background);
+      this.colorBoxes.splice(index, 1);
+      this.$nextTick(() => {
+        this.updateColorBoxMeta();
       });
     },
     selectColorBox(index) {

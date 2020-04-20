@@ -1,12 +1,14 @@
 <template>
   <div class="color-box">
     <div
-      class="color-box_foreground"
+      class="color-box_box"
       :class="{
         '--active': active
       }"
-      :style="[{ background: color }]"
-    ></div>
+    >
+      <div class="color-box_foreground" :style="[{ background: color }]"></div>
+      <div class="color-box_remove" @click.stop="remove"><span>X</span></div>
+    </div>
     <div class="color-box_score">
       <p class="color-box_rating">{{ score }}</p>
       <div class="color-box_ratingAA" :class="minScore"><span>AA</span></div>
@@ -52,7 +54,11 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    remove() {
+      this.$emit('remove');
+    }
+  }
 };
 </script>
 
@@ -60,7 +66,7 @@ export default {
 @import '@/scss/global';
 
 .color-box {
-  position: relative;
+  text-align: center;
 
   &_foreground {
     box-sizing: border-box;
@@ -71,13 +77,57 @@ export default {
 
     border: 2px solid transparent;
     border-radius: 100%;
+  }
+
+  &_box.--active &_foreground {
+    border-color: currentColor;
+  }
+
+  &_box {
+    position: relative;
+
+    display: inline-block;
 
     transition: transform 0.5s;
 
+    will-change: transform;
+
     &.--active {
-      border-color: currentColor;
       transform: scale(1.2);
     }
+  }
+
+  &_remove {
+    position: absolute;
+    top: -1vmin;
+    right: -3vmin;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 4vmin;
+    height: 4vmin;
+
+    background-color: currentColor;
+    border-radius: 100%;
+    transform: scale(0);
+    transform-origin: left bottom;
+    opacity: 0;
+
+    transition: transform 0.5s, opacity 0.35s;
+
+    will-change: transform;
+
+    span {
+      @include space-mono;
+      filter: invert(100%);
+    }
+  }
+
+  &_box.--active &_remove {
+    transform: scale(1);
+    opacity: 1;
   }
 
   &_score {
