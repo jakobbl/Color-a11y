@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    :class="{ '--isDark': isDark }"
+    :class="{ '-isDark': isDark }"
     :style="[{ background: background }, { '--background': background }]"
   >
     <h1 class="app_logo">Color a11y</h1>
@@ -27,9 +27,7 @@
         class="app_picker"
         ref="colorPicker"
       />
-      <div class="app_colorBox-add" @click="addColorBox">
-        <span>Add color</span>
-      </div>
+      <button class="app_colorBox-add" @click="addColorBox">Add color</button>
     </div>
   </div>
 </template>
@@ -132,6 +130,7 @@ html {
 /* stylelint-disable-next-line */
 #app {
   --color: #000;
+  --inverted: #fff;
   @include montserrat;
   display: flex;
   flex-direction: row;
@@ -141,13 +140,13 @@ html {
 
   color: var(--color);
 
-  transition: color 1s ease-in-out;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   /* stylelint-disable-next-line */
-  &.--isDark {
+  &.-isDark {
     --color: #fff;
+    --inverted: #000;
   }
 }
 
@@ -159,6 +158,8 @@ html {
 
     font-size: 1.5rem;
     text-align: center;
+
+    transition: color 0.5s ease-in-out;
   }
 
   &_content {
@@ -197,26 +198,22 @@ html {
       align-items: center;
       padding: 1em;
 
+      color: var(--color);
+
       font-size: 75%;
 
       background-color: transparent;
-      border: 2px solid currentColor;
+      border: 2px solid var(--color);
       opacity: 0.57;
 
       transition: background-color 0.25s, opacity 0.35s;
 
       &:hover,
       &:active {
-        background-color: currentColor;
+        color: var(--inverted);
+
+        background-color: var(--color);
         opacity: 1;
-
-        span {
-          filter: invert(100%);
-        }
-      }
-
-      span {
-        color: currentColor;
       }
     }
   }

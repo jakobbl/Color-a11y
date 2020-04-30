@@ -60,6 +60,8 @@ export default {
   @include space-mono;
   display: flex;
 
+  color: var(--color);
+
   &_value {
     margin-right: 1em;
 
@@ -97,7 +99,7 @@ export default {
   &_slider {
     flex: 1;
 
-    color: currentColor;
+    color: var(--color);
 
     &:focus,
     &:hover,

@@ -114,8 +114,6 @@ export default {
     border: 0;
     border-bottom: 2px solid var(--color);
 
-    transition: color 1s ease-in-out, border-color 1s ease-in-out;
-
     &:invalid {
       color: #f00;
     }
@@ -127,7 +125,7 @@ export default {
     margin-bottom: 0.5em;
     margin-left: auto;
 
-    color: currentColor;
+    color: var(--color);
 
     &:last-of-type {
       margin-bottom: 0;

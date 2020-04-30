@@ -11,10 +11,8 @@
     </div>
     <div class="color-box_score">
       <p class="color-box_rating">{{ score }}</p>
-      <div class="color-box_ratingAA" :class="minScore"><span>AA</span></div>
-      <div class="color-box_ratingAAA" :class="extendedScore">
-        <span>AAA</span>
-      </div>
+      <span class="color-box_ratingAA" :class="minScore">AA</span>
+      <span class="color-box_ratingAAA" :class="extendedScore">AAA</span>
     </div>
   </div>
 </template>
@@ -82,7 +80,7 @@ export default {
   }
 
   &_box.--active &_foreground {
-    border-color: currentColor;
+    border-color: var(--color);
   }
 
   &_box {
@@ -113,7 +111,7 @@ export default {
 
     font-size: clamp(1.5rem, 4vw, 2.5rem);
 
-    background-color: currentColor;
+    background-color: var(--color);
     border-radius: 100%;
     transform: scale(0);
     transform-origin: left bottom;
@@ -125,9 +123,9 @@ export default {
 
     span {
       @include space-mono;
-      font-size: 50%;
+      color: var(--inverted);
 
-      filter: invert(100%);
+      font-size: 50%;
     }
   }
 
@@ -161,37 +159,28 @@ export default {
     margin-right: 1em;
     padding: 0.25em 0.75em;
 
+    color: var(--color);
     font-weight: bold;
     font-size: max(12px, 0.8vw);
 
-    border: 2px solid;
-    // border-radius: 3em;
+    border: 2px solid var(--color);
     opacity: 0.57;
 
-    transition: font-weight 0.25s, transform 0.25s;
-    transition: opacity 0.35s, background-color 0.75s;
-    transition-delay: 0;
+    transition-duration: 0.5s;
+    transition-property: opacity, color, background-color;
 
-    span {
-      transition: filter 0.75s;
-    }
-
-    span::after {
+    &::after {
       content: ' X';
     }
 
     &.--success {
-      background: currentColor;
+      color: var(--inverted);
+
+      background: var(--color);
       transform-origin: right bottom;
       opacity: 1;
 
-      transition-delay: 0.125s;
-
-      span {
-        filter: invert(100%);
-      }
-
-      span::after {
+      &::after {
         content: ' OK';
       }
     }
