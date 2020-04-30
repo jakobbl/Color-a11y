@@ -68,6 +68,8 @@ export default {
 .color-box {
   text-align: center;
 
+  cursor: pointer;
+
   &_foreground {
     box-sizing: border-box;
     width: 15vmin;
@@ -99,15 +101,17 @@ export default {
 
   &_remove {
     position: absolute;
-    top: -1vmin;
-    right: -3vmin;
+    top: -0.1em;
+    right: -1em;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 4vmin;
-    height: 4vmin;
+    width: 1em;
+    height: 1em;
+
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
 
     background-color: currentColor;
     border-radius: 100%;
@@ -121,27 +125,31 @@ export default {
 
     span {
       @include space-mono;
+      font-size: 50%;
+
       filter: invert(100%);
     }
   }
 
   &_box.--active &_remove {
-    transform: scale(1);
-    opacity: 1;
+    transform: scale(0.8);
+    opacity: 0.2;
+
+    &:hover {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 
   &_score {
-    margin-top: 1.25rem;
-
+    font-size: clamp(22px, 2.5vw, 3rem);
     text-align: center;
 
     opacity: 0.87;
   }
 
   &_rating {
-    margin: 0.75em 0;
-
-    font-size: 1.75rem;
+    margin: 0.25em 0;
   }
 
   &_ratingAA,
@@ -154,10 +162,10 @@ export default {
     padding: 0.25em 0.75em;
 
     font-weight: bold;
-    font-size: 75%;
+    font-size: max(12px, 0.8vw);
 
     border: 2px solid;
-    border-radius: 3em;
+    // border-radius: 3em;
     opacity: 0.57;
 
     transition: font-weight 0.25s, transform 0.25s;

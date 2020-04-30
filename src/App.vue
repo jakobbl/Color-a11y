@@ -22,23 +22,20 @@
           }"
         />
       </div>
-      <div class="app_colorBox-add" @click="addColorBox">
-        <img svg-inline src="@/assets/add.svg" />
-      </div>
       <color-picker
         @input="colorChange($event)"
         class="app_picker"
         ref="colorPicker"
       />
+      <div class="app_colorBox-add" @click="addColorBox">
+        <span>Add color</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import convert from 'color-convert';
-import percivedLightness from 'relative-luminance';
-
-import { getRandomInt } from '@/utils';
+import { randomColor, needsDarkMode } from '@/utils';
 import ColorPicker from '@/components/color-picker';
 import ColorBox from '@/components/color-box';
 
@@ -49,31 +46,28 @@ export default {
     ColorBox
   },
   data() {
+    // For first render placeholder data
+    const bgColor = randomColor();
+    const boxColor = randomColor();
+    const darkMode = needsDarkMode(bgColor);
+
     return {
-      background: '',
-      colorBoxes: [],
-      colorBoxesMeta: [],
+      background: bgColor,
+      colorBoxes: [boxColor],
+      colorBoxesMeta: [
+        {
+          color: boxColor,
+          active: false
+        }
+      ],
       activeColorBox: -1,
-      isDark: false
+      isDark: darkMode
     };
   },
   mounted() {
-    this.colorBoxes.push(this.generatePlaceholderColor());
-    this.updateColorBoxMeta();
+    this.$refs.colorPicker.setTo(this.background);
   },
   methods: {
-    generatePlaceholderColor() {
-      let lightness;
-      if (this.isDark) {
-        lightness = getRandomInt(55, 100);
-      } else {
-        lightness = getRandomInt(0, 45);
-      }
-      return (
-        '#' +
-        convert.hsl.hex(getRandomInt(0, 360), getRandomInt(20, 100), lightness)
-      );
-    },
     updateColorBoxMeta() {
       this.colorBoxesMeta = this.colorBoxes.map((color, index) => {
         return {
@@ -83,7 +77,7 @@ export default {
       });
     },
     addColorBox() {
-      let newColor = this.generatePlaceholderColor();
+      let newColor = randomColor(this.isDark);
       this.colorBoxes.push(newColor);
       this.$nextTick(() => {
         this.updateColorBoxMeta();
@@ -117,13 +111,7 @@ export default {
         this.updateColorBoxMeta();
       } else {
         this.background = event.hex;
-        const pl = percivedLightness(event.rgb);
-
-        if (pl < 0.45) {
-          this.isDark = true;
-        } else {
-          this.isDark = false;
-        }
+        this.isDark = needsDarkMode(event.hex);
       }
     },
     shouldFadeOut(activeState) {
@@ -167,21 +155,21 @@ html {
   &_logo {
     width: 100%;
     margin: 0;
-    margin-bottom: 5vmin;
+    margin-bottom: 3vmax;
 
     font-size: 1.5rem;
     text-align: center;
   }
 
   &_content {
-    display: flex;
     flex: 1;
-    flex-wrap: wrap;
-    justify-content: center;
+
+    text-align: center;
   }
 
   &_picker {
     width: 100%;
+    margin: 3vmax 0;
   }
 
   &_colorBoxes {
@@ -189,7 +177,6 @@ html {
     grid-gap: 5vmin;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     width: 100%;
-    margin-bottom: 5vmin;
   }
 
   &_colorBox {
@@ -205,11 +192,31 @@ html {
     // }
 
     &-add {
-      width: 2rem;
-      height: 2rem;
+      @include space-mono;
+      display: inline-flex;
+      align-items: center;
+      padding: 1em;
 
-      svg {
-        fill: currentColor;
+      font-size: 75%;
+
+      background-color: transparent;
+      border: 2px solid currentColor;
+      opacity: 0.57;
+
+      transition: background-color 0.25s, opacity 0.35s;
+
+      &:hover,
+      &:active {
+        background-color: currentColor;
+        opacity: 1;
+
+        span {
+          filter: invert(100%);
+        }
+      }
+
+      span {
+        color: currentColor;
       }
     }
   }

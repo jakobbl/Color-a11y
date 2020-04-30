@@ -22,6 +22,7 @@ $transition: background 0.5s,
   background: transparent;
   border: 0;
   outline: none;
+  cursor: pointer;
 
   appearance: none;
 
@@ -45,7 +46,7 @@ $transition: background 0.5s,
       background: $thumb-color;
       border: $thumb-border-width solid $background;
       border-radius: 0;
-      cursor: pointer;
+      cursor: grab;
 
       transition: $transition;
 
@@ -72,13 +73,14 @@ $transition: background 0.5s,
     }
 
     &-range-thumb {
+
       width: $thumb-height * 0.25;
       height: $thumb-height;
 
       background: $thumb-color;
       border: $thumb-border-width solid $background;
       border-radius: 0;
-      cursor: pointer;
+      cursor: grab;
 
       will-change: transform;
     }
@@ -102,6 +104,7 @@ $transition: background 0.5s,
     }
 
     &-thumb {
+
       width: $track-height * 0.25;
       height: $track-height;
       margin: 0 $thumb-border-width 0;
@@ -110,6 +113,7 @@ $transition: background 0.5s,
       border: 0;
       border-radius: 0;
       box-shadow: none;
+      cursor: grab;
 
       will-change: transform;
     }
@@ -133,8 +137,10 @@ $transition: background 0.5s,
       }
 
       &-slider-thumb {
+
         background: $active-thumb-color;
         transform: scaleY($thumb-active-transform);
+        cursor: grab;
       }
     }
 

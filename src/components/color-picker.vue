@@ -3,11 +3,11 @@
     <input
       type="text"
       pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+      placeholder="#FF00FF"
       class="color-picker_hex"
       :value="hex"
       @input="updateHSL($event.target.value)"
     />
-    <div class="flex-breaker" />
     <range-slider
       :max="360"
       title="Hue"
@@ -37,9 +37,7 @@
 
 <script>
 import { hsluvToHex, hexToHsluv } from 'hsluv';
-import convert from 'color-convert';
 
-import { twoDecimals } from '@/utils';
 import rangeSlider from '@/components/range-slider';
 
 export default {
@@ -49,9 +47,9 @@ export default {
   },
   data() {
     return {
-      hue: 0,
-      saturation: 0,
-      lightness: 87,
+      hue: undefined,
+      saturation: undefined,
+      lightness: undefined,
       hex: null
     };
   },
@@ -81,7 +79,7 @@ export default {
       this.lightness = hsl[2];
     },
     rounded(value) {
-      return twoDecimals(value);
+      return Math.round(value * 10) / 10;
     },
     setTo(hex) {
       this.updateHSL(hex);
@@ -90,12 +88,8 @@ export default {
   },
   watch: {
     hex() {
-      const rgb = convert.hex.rgb(this.hex);
-      this.$emit('input', { hex: this.hex, rgb });
+      this.$emit('input', { hex: this.hex });
     }
-  },
-  mounted() {
-    this.updateHex();
   }
 };
 </script>
@@ -109,7 +103,7 @@ export default {
   &_hex {
     @include montserrat;
     width: 9ch;
-    margin-bottom: 3vmin;
+    margin-bottom: 3vmax;
     padding: 0.25em 0.5em;
 
     color: var(--color);
@@ -128,7 +122,7 @@ export default {
   }
 
   &_slider {
-    width: 45vw;
+    width: 55vmax;
     margin-right: auto;
     margin-bottom: 0.5em;
     margin-left: auto;

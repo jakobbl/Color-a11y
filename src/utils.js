@@ -1,9 +1,27 @@
+import convert from 'color-convert';
+import percivedLightness from 'relative-luminance';
+
 export function twoDecimals(value) {
   return Math.round((value + Number.EPSILON) * 100) / 100;
 }
 
-export function getRandomInt(min, max) {
+export function randomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function randomColor(darkMode = false) {
+  let lightness;
+  if (darkMode) {
+    lightness = randomInt(55, 100);
+  } else {
+    lightness = randomInt(15, 45);
+  }
+  return '#' + convert.hsl.hex(randomInt(0, 360), randomInt(30, 90), lightness);
+}
+
+export function needsDarkMode(hex) {
+  const rgb = convert.hex.rgb(hex);
+  return percivedLightness(rgb) < 0.45;
 }

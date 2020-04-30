@@ -4,7 +4,7 @@
       <input
         type="number"
         min="0"
-        step="0.01"
+        step="0.1"
         :max="max"
         :value="valueClamp"
         @keyup="handleInput"
@@ -14,7 +14,7 @@
     <input
       type="range"
       min="0"
-      step="0.01"
+      step="0.1"
       :max="max"
       class="range-slider_slider range-input"
       @input="handleInput"
@@ -61,7 +61,6 @@ export default {
   display: flex;
 
   &_value {
-    width: 7ch;
     margin-right: 1em;
 
     text-align: right;
@@ -69,9 +68,10 @@ export default {
     input {
       display: inline-block;
       box-sizing: border-box;
+      margin-right: 0.125em;
 
       color: currentColor;
-      font-size: 100%;
+      font-size: 1rem;
       text-align: right;
 
       background: none;
@@ -89,6 +89,8 @@ export default {
     width: 10ch;
     margin-left: 1em;
 
+    font-size: 1rem;
+
     text-align: left;
   }
 
@@ -97,7 +99,9 @@ export default {
 
     color: currentColor;
 
-    &:focus {
+    &:focus,
+    &:hover,
+    &:active {
       outline: none;
     }
   }
