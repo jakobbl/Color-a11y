@@ -3,17 +3,18 @@
     <div class="range-slider_value">
       <input
         type="number"
-        min="0"
+        :min="min"
         step="0.1"
         :max="max"
         :value="valueClamp"
-        @keyup="handleInput"
+        @input="handleInput"
+        @change="formatInput"
       />
       <span>{{ suffix }}</span>
     </div>
     <input
       type="range"
-      min="0"
+      :min="min"
       step="0.1"
       :max="max"
       class="range-slider_slider range-input"
@@ -30,15 +31,25 @@ export default {
   props: ['value', 'title', 'max', 'suffix'],
   data() {
     return {
-      valueClamp: null
+      valueClamp: null,
+      min: 0
     };
   },
   methods: {
     handleInput(event) {
       let val = parseInt(event.target.value);
-      val = Math.min(Math.max(val, 0), this.max);
+      if (isNaN(val)) return;
+      val = Math.min(Math.max(val, this.min), this.max);
       this.valueClamp = val;
       this.$emit('input', val);
+    },
+    formatInput(event) {
+      let val = parseInt(event.target.value);
+      if (isNaN(val)) {
+        event.target.value = this.valueClamp;
+      } else {
+        event.target.value = Math.min(Math.max(val, this.min), this.max);
+      }
     }
   },
   mounted() {
@@ -84,6 +95,12 @@ export default {
         border-bottom: 1px solid;
         outline: none;
       }
+
+      // &:invalid {
+      //   color: var(--inverted);
+
+      //   background-color: var(--color);
+      // }
     }
   }
 
@@ -94,6 +111,10 @@ export default {
     font-size: 1rem;
 
     text-align: left;
+
+    transform-origin: center left;
+
+    transition: transform 0.25s;
   }
 
   &_slider {
@@ -101,10 +122,27 @@ export default {
 
     color: var(--color);
 
+    opacity: 0.57;
+
+    transition: opacity 0.35s;
+
     &:focus,
     &:hover,
     &:active {
       outline: none;
+    }
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    .range-slider_title {
+      font-weight: bold;
+
+      transform: scale(1.15);
+    }
+    .range-slider_slider {
+      opacity: 1;
     }
   }
 }

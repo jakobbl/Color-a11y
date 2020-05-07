@@ -129,8 +129,6 @@ html {
 
 /* stylelint-disable-next-line */
 #app {
-  --color: #000;
-  --inverted: #fff;
   @include montserrat;
   display: flex;
   flex-direction: row;
@@ -147,6 +145,7 @@ html {
   &.-isDark {
     --color: #fff;
     --inverted: #000;
+    --invalid: rgb(255, 45, 45);
   }
 }
 
