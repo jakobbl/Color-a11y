@@ -164,6 +164,12 @@ export default {
     &:invalid:not(:focus) ~ .ColorPicker-error {
       opacity: 1;
     }
+
+    &::placeholder {
+      color: var(--color);
+
+      opacity: 0.37;
+    }
   }
 
   &-error {
