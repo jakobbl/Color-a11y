@@ -7,20 +7,22 @@
     <h1 class="App-logo">Color a11y</h1>
     <div class="App-content">
       <div class="App-colorBoxes">
-        <color-box
-          v-for="(box, index) in colorBoxesMeta"
-          :key="index"
-          :background="background"
-          :color="box.color"
-          :active="box.active"
-          @click.native="selectColorBox(index)"
-          @remove="removeColorBox(index)"
-          class="App-colorBox"
-          :class="{
-            '--isFaded': shouldFadeOut(box.active),
-            '--isSelected': box.active
-          }"
-        />
+        <transition-group name="ColorBoxList" tag="div" appear>
+          <color-box
+            v-for="(box, index) in colorBoxesMeta"
+            :key="`${box}-${index}`"
+            :background="background"
+            :color="box.color"
+            :active="box.active"
+            @click.native="selectColorBox(index)"
+            @remove="removeColorBox(index)"
+            class="App-colorBox"
+            :class="{
+              '--isFaded': shouldFadeOut(box.active),
+              '--isSelected': box.active
+            }"
+          />
+        </transition-group>
       </div>
       <color-picker
         @input="colorChange($event)"
@@ -172,7 +174,7 @@ html {
     margin: 3vmax 0;
   }
 
-  &-colorBoxes {
+  &-colorBoxes > div {
     display: grid;
     grid-gap: 5vmin;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -187,9 +189,6 @@ html {
     &.--isFaded {
       opacity: 0.37;
     }
-
-    // &.--selected {
-    // }
 
     &Add {
       @include space-mono;
@@ -215,6 +214,22 @@ html {
         opacity: 1;
       }
     }
+  }
+}
+
+.ColorBoxList {
+  &-enter-active {
+    transition: opacity 0.5s, transform 0.35s;
+  }
+
+  &-leave-active {
+    transition: opacity 0.25s, transform 0.35s;
+  }
+
+  &-enter,
+  &-leave-to {
+    transform: translateY(20%);
+    opacity: 0;
   }
 }
 </style>
