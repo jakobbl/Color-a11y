@@ -37,14 +37,16 @@ export default {
   },
   methods: {
     handleInput(event) {
-      let val = parseInt(event.target.value);
+      const input = event.target.value.replace(',', '.');
+      let val = parseFloat(input).toFixed(1);
       if (isNaN(val)) return;
       val = Math.min(Math.max(val, this.min), this.max);
       this.valueClamp = val;
       this.$emit('input', val);
     },
     formatInput(event) {
-      let val = parseInt(event.target.value);
+      const input = event.target.value.replace(',', '.');
+      let val = parseFloat(input).toFixed(1);
       if (isNaN(val)) {
         event.target.value = this.valueClamp;
       } else {
@@ -95,12 +97,6 @@ export default {
         border-bottom: 1px solid;
         outline: none;
       }
-
-      // &:invalid {
-      //   color: var(--inverted);
-
-      //   background-color: var(--color);
-      // }
     }
   }
 
