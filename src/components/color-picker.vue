@@ -1,30 +1,23 @@
 <template>
-  <div class="color-picker">
-    <div class="color-picker_hexInput">
+  <div class="ColorPicker">
+    <div class="ColorPicker-hexInput">
       <input
         type="text"
         pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
         :placeholder="placeholder"
         maxlength="7"
-        class="color-picker_hex"
+        class="ColorPicker-hex"
         :value="hex"
         @change="formatHex"
         @input="updateHSL($event.target.value)"
       />
-      <p class="color-picker_error">
+      <p class="ColorPicker-error">
         <img
           svg-inline
-          class="color-picker_errorIcon"
+          class="ColorPicker-errorIcon"
           src="../assets/error.svg"
         />
       </p>
-      <!-- <p class="color-picker_error --isLeft">
-        <img
-          svg-inline
-          class="color-picker_errorIcon"
-          src="../assets/error.svg"
-        />
-      </p> -->
     </div>
     <range-slider
       :max="360"
@@ -32,7 +25,7 @@
       suffix="°"
       :value="rounded(hue)"
       @input="setHue"
-      class="color-picker_slider"
+      class="ColorPicker-slider"
     />
     <range-slider
       :max="100"
@@ -40,7 +33,7 @@
       suffix="%"
       :value="rounded(saturation)"
       @input="setSaturation"
-      class="color-picker_slider"
+      class="ColorPicker-slider"
     />
     <range-slider
       :max="100"
@@ -48,7 +41,7 @@
       suffix="%"
       :value="rounded(lightness)"
       @input="setLightness"
-      class="color-picker_slider"
+      class="ColorPicker-slider"
     />
   </div>
 </template>
@@ -136,17 +129,17 @@ export default {
 <style lang="scss">
 @import '@/scss/global';
 
-.color-picker {
+.ColorPicker {
   text-align: center;
 
-  &_hexInput {
+  &-hexInput {
     position: relative;
 
     display: inline-block;
     margin-bottom: 3vmax;
   }
 
-  &_hex {
+  &-hex {
     @include montserrat;
 
     box-sizing: border-box;
@@ -168,12 +161,12 @@ export default {
       border: 2px solid;
     }
 
-    &:invalid:not(:focus) ~ .color-picker_error {
+    &:invalid:not(:focus) ~ .ColorPicker-error {
       opacity: 1;
     }
   }
 
-  &_error {
+  &-error {
     position: absolute;
     top: 50%;
     left: -10%;
@@ -197,21 +190,9 @@ export default {
       stroke: var(--color);
       stroke-width: 1em;
     }
-
-    // &.--isLeft {
-    //   right: -10%;
-
-    //   text-align: left;
-
-    //   transform: translate(100%, -50%);
-    // }
-
-    // &.--isLeft &Icon {
-    //   transform: rotate(180deg);
-    // }
   }
 
-  &_slider {
+  &-slider {
     width: 55vmax;
     margin-right: auto;
     margin-bottom: 0.5em;

@@ -1,6 +1,6 @@
 <template>
-  <div class="range-slider">
-    <div class="range-slider_value">
+  <div class="RangeSlider">
+    <div class="RangeSlider-value">
       <input
         type="number"
         :min="min"
@@ -13,15 +13,15 @@
       <span>{{ suffix }}</span>
     </div>
     <input
-      type="range"
+      type="Range"
       :min="min"
       step="0.1"
       :max="max"
-      class="range-slider_slider range-input"
+      class="RangeSlider-slider Range-input"
       @input="handleInput"
       :value="valueClamp"
     />
-    <span class="range-slider_title">{{ title }}</span>
+    <span class="RangeSlider-title">{{ title }}</span>
   </div>
 </template>
 
@@ -67,13 +67,13 @@ export default {
 @import '@/scss/global';
 @import '@/scss/_input-range';
 
-.range-slider {
+.RangeSlider {
   @include space-mono;
   display: flex;
 
   color: var(--color);
 
-  &_value {
+  &-value {
     margin-right: 1em;
 
     text-align: right;
@@ -104,7 +104,7 @@ export default {
     }
   }
 
-  &_title {
+  &-title {
     width: 10ch;
     margin-left: 1em;
 
@@ -117,7 +117,7 @@ export default {
     transition: transform 0.25s;
   }
 
-  &_slider {
+  &-slider {
     flex: 1;
 
     color: var(--color);
@@ -136,12 +136,13 @@ export default {
   &:hover,
   &:focus,
   &:active {
-    .range-slider_title {
+    .RangeSlider-title {
       font-weight: bold;
 
       transform: scale(1.15);
     }
-    .range-slider_slider {
+
+    .RangeSlider-slider {
       opacity: 1;
     }
   }

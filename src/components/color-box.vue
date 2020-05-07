@@ -1,18 +1,18 @@
 <template>
-  <div class="color-box">
+  <div class="ColorBox">
     <div
-      class="color-box_box"
+      class="ColorBox-box"
       :class="{
-        '--active': active
+        '--isActive': active
       }"
     >
-      <div class="color-box_foreground" :style="[{ background: color }]"></div>
-      <div class="color-box_remove" @click.stop="remove"><span>X</span></div>
+      <div class="ColorBox-foreground" :style="[{ background: color }]"></div>
+      <div class="ColorBox-remove" @click.stop="remove"><span>X</span></div>
     </div>
-    <div class="color-box_score">
-      <p class="color-box_rating">{{ score }}</p>
-      <span class="color-box_ratingAA" :class="minScore">AA</span>
-      <span class="color-box_ratingAAA" :class="extendedScore">AAA</span>
+    <div class="ColorBox-score">
+      <p class="ColorBox-rating">{{ score }}</p>
+      <span class="ColorBox-ratingAA" :class="minScore">AA</span>
+      <span class="ColorBox-ratingAAA" :class="extendedScore">AAA</span>
     </div>
   </div>
 </template>
@@ -36,12 +36,12 @@ export default {
     },
     minScore() {
       return {
-        '--success': this.score >= 4.5
+        '--isSuccess': this.score >= 4.5
       };
     },
     extendedScore() {
       return {
-        '--success': this.score >= 7
+        '--isSuccess': this.score >= 7
       };
     },
     needsContrastBorder() {
@@ -63,12 +63,12 @@ export default {
 <style lang="scss">
 @import '@/scss/global';
 
-.color-box {
+.ColorBox {
   text-align: center;
 
   cursor: pointer;
 
-  &_foreground {
+  &-foreground {
     box-sizing: border-box;
     width: 15vmin;
     height: 15vmin;
@@ -79,11 +79,11 @@ export default {
     border-radius: 100%;
   }
 
-  &_box.--active &_foreground {
+  &-box.--isActive &-foreground {
     border-color: var(--color);
   }
 
-  &_box {
+  &-box {
     position: relative;
 
     display: inline-block;
@@ -92,12 +92,12 @@ export default {
 
     will-change: transform;
 
-    &.--active {
+    &.--isActive {
       transform: scale(1.2);
     }
   }
 
-  &_remove {
+  &-remove {
     position: absolute;
     top: -0.1em;
     right: -1em;
@@ -129,7 +129,7 @@ export default {
     }
   }
 
-  &_box.--active &_remove {
+  &-box.--isActive &-remove {
     transform: scale(0.8);
     opacity: 0.2;
 
@@ -139,19 +139,19 @@ export default {
     }
   }
 
-  &_score {
+  &-score {
     font-size: clamp(22px, 2.5vw, 3rem);
     text-align: center;
 
     opacity: 0.87;
   }
 
-  &_rating {
+  &-rating {
     margin: 0.25em 0;
   }
 
-  &_ratingAA,
-  &_ratingAAA {
+  &-ratingAA,
+  &-ratingAAA {
     @include space-mono;
     display: inline-block;
     box-sizing: border-box;
@@ -173,7 +173,7 @@ export default {
       content: ' X';
     }
 
-    &.--success {
+    &.--isSuccess {
       color: var(--inverted);
 
       background: var(--color);
@@ -186,7 +186,7 @@ export default {
     }
   }
 
-  &_ratingAA {
+  &-ratingAA {
     margin-right: 1em;
   }
 }

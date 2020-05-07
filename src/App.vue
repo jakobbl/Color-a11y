@@ -1,12 +1,12 @@
 <template>
   <div
-    id="app"
-    :class="{ '-isDark': isDark }"
+    id="App"
+    :class="{ '--isDark': isDark }"
     :style="[{ background: background }, { '--background': background }]"
   >
-    <h1 class="app_logo">Color a11y</h1>
-    <div class="app_content">
-      <div class="app_colorBoxes">
+    <h1 class="App-logo">Color a11y</h1>
+    <div class="App-content">
+      <div class="App-colorBoxes">
         <color-box
           v-for="(box, index) in colorBoxesMeta"
           :key="index"
@@ -15,19 +15,19 @@
           :active="box.active"
           @click.native="selectColorBox(index)"
           @remove="removeColorBox(index)"
-          class="app_colorBox"
+          class="App-colorBox"
           :class="{
-            '--faded': shouldFadeOut(box.active),
-            '--selected': box.active
+            '--isFaded': shouldFadeOut(box.active),
+            '--isSelected': box.active
           }"
         />
       </div>
       <color-picker
         @input="colorChange($event)"
-        class="app_picker"
+        class="App-picker"
         ref="colorPicker"
       />
-      <button class="app_colorBox-add" @click="addColorBox">Add color</button>
+      <button class="App-colorBoxAdd" @click="addColorBox">Add color</button>
     </div>
   </div>
 </template>
@@ -128,7 +128,7 @@ html {
 }
 
 /* stylelint-disable-next-line */
-#app {
+#App {
   @include montserrat;
   display: flex;
   flex-direction: row;
@@ -142,15 +142,15 @@ html {
   -moz-osx-font-smoothing: grayscale;
 
   /* stylelint-disable-next-line */
-  &.-isDark {
+  &.--isDark {
     --color: #fff;
     --inverted: #000;
     --invalid: rgb(255, 45, 45);
   }
 }
 
-.app {
-  &_logo {
+.App {
+  &-logo {
     width: 100%;
     margin: 0;
     margin-bottom: 3vmax;
@@ -161,37 +161,37 @@ html {
     transition: color 0.5s ease-in-out;
   }
 
-  &_content {
+  &-content {
     flex: 1;
 
     text-align: center;
   }
 
-  &_picker {
+  &-picker {
     width: 100%;
     margin: 3vmax 0;
   }
 
-  &_colorBoxes {
+  &-colorBoxes {
     display: grid;
     grid-gap: 5vmin;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     width: 100%;
   }
 
-  &_colorBox {
+  &-colorBox {
     transition: opacity 1s, transform 0.25s;
 
     will-change: opacity, transform;
 
-    &.--faded {
+    &.--isFaded {
       opacity: 0.37;
     }
 
     // &.--selected {
     // }
 
-    &-add {
+    &Add {
       @include space-mono;
       display: inline-flex;
       align-items: center;
