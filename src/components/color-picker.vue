@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import colorConvert from 'color-convert';
 import { hsluvToHex, hexToHsluv } from 'hsluv';
 
 import rangeSlider from '@/components/range-slider';
@@ -71,6 +72,11 @@ export default {
       } else {
         return '#aabbcc';
       }
+    },
+    hsluv: {
+      get() {
+        return this.$store.state.hsluv;
+      }
     }
   },
   methods: {
@@ -87,8 +93,15 @@ export default {
       this.updateHex();
     },
     updateHex() {
-      const hsl = [this.hue, this.saturation, this.lightness];
-      const hex = hsluvToHex(hsl);
+      let hex;
+
+      if (this.hsluv) {
+        hex = hsluvToHex([this.hue, this.saturation, this.lightness]);
+      } else {
+        hex =
+          '#' + colorConvert.hsl.hex(this.hue, this.saturation, this.lightness);
+      }
+
       this.hex = hex;
     },
     updateHSL(hex) {
@@ -96,7 +109,13 @@ export default {
       const hexRegex = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
       if (!hexRegex.test(hex)) return;
 
-      const hsl = hexToHsluv(hex);
+      let hsl;
+      if (this.hsluv) {
+        hsl = hexToHsluv(hex);
+      } else {
+        hsl = colorConvert.hex.hsl(hex);
+      }
+
       this.hex = hex;
       this.hue = hsl[0];
       this.saturation = hsl[1];

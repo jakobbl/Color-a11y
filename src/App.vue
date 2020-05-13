@@ -196,13 +196,18 @@ html {
   }
 
   &-optionCheckbox {
-    background: transparent;
+    display: none;
+    &:checked ~ label {
+      text-decoration: none;
+    }
   }
 
   &-optionLabel {
     @include space-mono();
     margin-right: 2em;
     margin-left: 0.5em;
+
+    text-decoration: line-through;
   }
 
   &-changeMode {
