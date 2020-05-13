@@ -5,6 +5,16 @@
     :style="[{ background: background }, { '--background': background }]"
   >
     <h1 class="App-logo">Color a11y</h1>
+    <div class="App-options">
+      <input
+        type="checkbox"
+        v-model="hsluv"
+        id="hsluv-option"
+        class="App-optionCheckbox"
+      />
+      <label for="hsluv-option" class="App-optionLabel">Use HSLuv</label>
+      <a href="#" class="App-changeMode">Open in crossgrid</a>
+    </div>
     <div class="App-content">
       <div class="App-colorBoxes">
         <transition-group name="ColorBoxList" tag="div" appear>
@@ -46,25 +56,38 @@ export default {
     ColorBox
   },
   data() {
-    // For first render placeholder data
-    const bgColor = randomColor();
-    const boxColor = randomColor();
-    const darkMode = needsDarkMode(bgColor);
-
     return {
-      background: bgColor,
-      colorBoxes: [boxColor],
-      colorBoxesMeta: [
-        {
-          color: boxColor,
-          active: false
-        }
-      ],
+      colorBoxesMeta: [],
       activeColorBox: -1,
-      isDark: darkMode
+      isDark: false
     };
   },
+  computed: {
+    hsluv: {
+      get() {
+        return this.$store.state.hsluv;
+      },
+      set(value) {
+        this.$store.commit('setHSLuv', value);
+      }
+    },
+    background: {
+      get() {
+        return this.$store.state.background;
+      },
+      set(value) {
+        this.$store.commit('setBackground', value);
+      }
+    },
+    colorBoxes: {
+      get() {
+        return this.$store.state.colorBoxes;
+      }
+    }
+  },
   mounted() {
+    this.isDark = needsDarkMode(this.background);
+    this.updateColorBoxMeta();
     this.$refs.colorPicker.setTo(this.background);
   },
   methods: {
@@ -78,7 +101,7 @@ export default {
     },
     addColorBox() {
       let newColor = randomColor(this.isDark);
-      this.colorBoxes.push(newColor);
+      this.$store.commit('addBox', newColor);
       this.$nextTick(() => {
         this.updateColorBoxMeta();
         setTimeout(() => {
@@ -90,7 +113,7 @@ export default {
     removeColorBox(index) {
       this.activeColorBox = -1;
       this.$refs.colorPicker.setTo(this.background);
-      this.colorBoxes.splice(index, 1);
+      this.$store.commit('removeBox', index);
       this.$nextTick(() => {
         this.updateColorBoxMeta();
       });
@@ -107,10 +130,13 @@ export default {
     },
     colorChange(event) {
       if (this.activeColorBox >= 0) {
-        this.colorBoxes[this.activeColorBox] = event.hex;
+        this.$store.commit('changeBox', {
+          index: this.activeColorBox,
+          hex: event.hex
+        });
         this.updateColorBoxMeta();
       } else {
-        this.background = event.hex;
+        this.$store.commit('setBackground', event.hex);
         this.isDark = needsDarkMode(event.hex);
       }
     },
@@ -155,12 +181,38 @@ html {
   &-logo {
     width: 100%;
     margin: 0;
-    margin-bottom: 3vmax;
 
     font-size: 1.5rem;
     text-align: center;
 
     transition: color 0.5s ease-in-out;
+  }
+
+  &-options {
+    width: 100%;
+    margin-bottom: 3vmax;
+
+    text-align: center;
+  }
+
+  &-optionCheckbox {
+    background: transparent;
+  }
+
+  &-optionLabel {
+    @include space-mono();
+    margin-right: 2em;
+    margin-left: 0.5em;
+  }
+
+  &-changeMode {
+    @include space-mono();
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   &-content {
