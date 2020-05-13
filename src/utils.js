@@ -25,3 +25,8 @@ export function needsDarkMode(hex) {
   const rgb = convert.hex.rgb(hex);
   return percivedLightness(rgb) < 0.45;
 }
+
+export function isValidHex(hex) {
+  const hexRegex = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
+  return hexRegex.test(hex);
+}

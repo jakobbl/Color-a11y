@@ -49,6 +49,7 @@
 <script>
 import colorConvert from 'color-convert';
 import { hsluvToHex, hexToHsluv } from 'hsluv';
+import { isValidHex } from '@/utils';
 
 import rangeSlider from '@/components/range-slider';
 
@@ -106,8 +107,7 @@ export default {
     },
     updateHSL(hex) {
       // Early exit
-      const hexRegex = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
-      if (!hexRegex.test(hex)) return;
+      if (!isValidHex(hex)) return;
 
       let hsl;
       if (this.hsluv) {

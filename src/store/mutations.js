@@ -11,6 +11,10 @@ export const mutations = {
   removeBox(state, index) {
     state.colorBoxes.splice(index, 1);
   },
+  overrideBoxesTo(state, arr) {
+    if (!Array.isArray(arr)) return;
+    state.colorBoxes = arr;
+  },
   setHSLuv(state, value) {
     state.hsluv = value;
   }
