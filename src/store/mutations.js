@@ -17,5 +17,8 @@ export const mutations = {
   },
   setHSLuv(state, value) {
     state.hsluv = value;
+  },
+  setLetters(state, value) {
+    state.letters = value;
   }
 };

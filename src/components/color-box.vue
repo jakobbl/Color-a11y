@@ -6,7 +6,16 @@
         '--isActive': active
       }"
     >
-      <div class="ColorBox-foreground" :style="[{ background: color }]"></div>
+      <letters
+        class="ColorBox-foreground"
+        :style="[{ fill: color }]"
+        v-if="letters"
+      />
+      <div
+        class="ColorBox-foreground"
+        :style="[{ background: color }]"
+        v-else
+      ></div>
       <div class="ColorBox-remove" @click.stop="remove"><span>X</span></div>
     </div>
     <div class="ColorBox-score">
@@ -19,16 +28,25 @@
 
 <script>
 import { hex } from 'wcag-contrast';
+
 import { twoDecimals } from '@/utils';
+import letters from '@/components/icons/letters';
 
 export default {
   name: 'color-box',
   props: ['background', 'color', 'active'],
-  components: {},
+  components: {
+    letters
+  },
   data() {
     return {};
   },
   computed: {
+    letters: {
+      get() {
+        return this.$store.state.letters;
+      }
+    },
     score() {
       const contrast = hex(this.background, this.color);
       const rounded = twoDecimals(contrast);

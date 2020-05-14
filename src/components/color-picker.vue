@@ -12,11 +12,7 @@
         @input="updateHSL($event.target.value)"
       />
       <p class="ColorPicker-error">
-        <img
-          svg-inline
-          class="ColorPicker-errorIcon"
-          src="../assets/error.svg"
-        />
+        <error-arrow class="ColorPicker-errorIcon" />
       </p>
     </div>
     <range-slider
@@ -52,11 +48,13 @@ import { hsluvToHex, hexToHsluv } from 'hsluv';
 import { isValidHex } from '@/utils';
 
 import rangeSlider from '@/components/range-slider';
+import errorArrow from '@/components/icons/error-arrow';
 
 export default {
   name: 'color-picker',
   components: {
-    rangeSlider
+    rangeSlider,
+    errorArrow
   },
   data() {
     return {
@@ -155,7 +153,7 @@ export default {
     position: relative;
 
     display: inline-block;
-    margin-bottom: 3vmax;
+    margin-bottom: 3vmin;
   }
 
   &-hex {
@@ -196,8 +194,6 @@ export default {
     top: 50%;
     left: -10%;
 
-    height: 1em;
-
     margin: 0;
 
     text-align: right;
@@ -213,12 +209,12 @@ export default {
 
       fill: none;
       stroke: var(--color);
-      stroke-width: 1em;
     }
   }
 
   &-slider {
-    width: 55vmax;
+    width: 90%;
+    width: min(80%, 1000px);
     margin-right: auto;
     margin-bottom: 0.5em;
     margin-left: auto;
