@@ -1,11 +1,16 @@
 <template v-if="error">
-  <div>
-    <div v-if="error">
-      <h1>Invalid share link</h1>
-      <router-link to="/">Go home</router-link>
+  <div class="Share">
+    <div class="Share-top">
+      <h1 class="Share-logo">Color a11y</h1>
     </div>
-    <div v-else>
-      <h1>Setting up</h1>
+    <div class="Share-content">
+      <div v-if="error">
+        <h1>Invalid share link</h1>
+        <router-link to="/">Go home</router-link>
+      </div>
+      <div v-else>
+        <h1>Setting up</h1>
+      </div>
     </div>
   </div>
 </template>
@@ -44,19 +49,44 @@ export default {
 <style scoped lang="scss">
 @import '@/scss/global';
 
-div {
-  @include montserrat();
+.Share {
+  @include montserrat;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-}
+  justify-content: space-between;
+  min-height: calc(100vh - 10vmin);
+  padding: 5vmin;
 
-h1 {
-  width: 100%;
+  background-color: var(--invalid);
 
-  text-align: center;
+  &-top {
+    width: 100%;
+  }
+
+  &-logo {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 1rem;
+
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  &-content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+
+    margin-bottom: 5%;
+
+    color: var(--inverted);
+    font-size: 150%;
+    text-align: center;
+  }
+
+  a {
+    color: var(--color);
+  }
 }
 </style>
