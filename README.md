@@ -1,24 +1,4 @@
-# contrast-checker
+[logo]: /apple-touch-icon-152x152.png?raw=true
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# Color a11y
+## A WCAG color contrast checker
