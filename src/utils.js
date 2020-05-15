@@ -1,5 +1,6 @@
 import convert from 'color-convert';
 import percivedLightness from 'relative-luminance';
+import { hex } from 'wcag-contrast';
 
 export function twoDecimals(value) {
   return Math.round((value + Number.EPSILON) * 100) / 100;
@@ -29,4 +30,10 @@ export function needsDarkMode(hex) {
 export function isValidHex(hex) {
   const hexRegex = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
   return hexRegex.test(hex);
+}
+
+export function wcagScore(background, foreground) {
+  const contrast = hex(background, foreground);
+  const rounded = twoDecimals(contrast);
+  return rounded;
 }

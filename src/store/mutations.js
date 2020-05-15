@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 export const mutations = {
   setBackground(state, hex) {
     state.background = hex;
@@ -6,7 +8,7 @@ export const mutations = {
     state.colorBoxes.push(hex);
   },
   changeBox(state, payload) {
-    state.colorBoxes[payload.index] = payload.hex;
+    Vue.set(state.colorBoxes, payload.index, payload.hex);
   },
   removeBox(state, index) {
     state.colorBoxes.splice(index, 1);
@@ -19,6 +21,15 @@ export const mutations = {
     state.hsluv = value;
   },
   setLetters(state, value) {
+    if (value === true) {
+      state.icons = false;
+    }
     state.letters = value;
+  },
+  setIcons(state, value) {
+    if (value === true) {
+      state.letters = false;
+    }
+    state.icons = value;
   }
 };

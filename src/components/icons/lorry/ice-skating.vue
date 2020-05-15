@@ -1,0 +1,75 @@
+<template>
+  <svg id="IKONER" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+    <title>Ice-skating-shoe</title>
+    <path
+      d="M194.48,82h91V247.85a16.33,16.33,0,0,1-16.33,16.33H85.81a16.33,16.33,0,0,1-16.33-16.33v-10.1c0-23.49,18.61-43,42.1-43.55l13.9,0,69-69Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-miterlimit="10"
+      stroke-width="18.75"
+    />
+    <line
+      x1="195.58"
+      y1="134.11"
+      x2="231.96"
+      y2="170.48"
+      fill="none"
+      stroke="currentColor"
+      stroke-miterlimit="10"
+      stroke-width="18.75"
+    />
+    <line
+      x1="174.96"
+      y1="154.73"
+      x2="205.02"
+      y2="184.8"
+      fill="none"
+      stroke="currentColor"
+      stroke-miterlimit="10"
+      stroke-width="18.75"
+    />
+    <line
+      x1="154.65"
+      y1="175.04"
+      x2="174.13"
+      y2="194.53"
+      fill="none"
+      stroke="currentColor"
+      stroke-miterlimit="10"
+      stroke-width="18.75"
+    />
+    <line
+      x1="128.98"
+      y1="264.18"
+      x2="128.98"
+      y2="307.35"
+      fill="none"
+      stroke="currentColor"
+      stroke-miterlimit="10"
+      stroke-width="18.75"
+    />
+    <line
+      x1="264.98"
+      y1="264.18"
+      x2="264.98"
+      y2="306.68"
+      fill="none"
+      stroke="currentColor"
+      stroke-miterlimit="10"
+      stroke-width="18.75"
+    />
+    <path
+      d="M318.65,306.68H104.73a82.06,82.06,0,0,1-48-15.5"
+      fill="none"
+      stroke="currentColor"
+      stroke-miterlimit="10"
+      stroke-width="18.75"
+    />
+  </svg>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style scoped></style>

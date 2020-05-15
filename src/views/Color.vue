@@ -7,34 +7,40 @@
     <div class="Color-top">
       <h1 class="Color-logo">Color a11y</h1>
       <div class="Color-options">
-        <div
-          class="Color-option"
-          @click="hsluv = !hsluv"
-          :class="{ '--isInactive': !hsluv }"
-        >
-          <colorspace-icon class="Color-optionIcon" />
-          <span for="hsluv-option" class="Color-optionLabel">HSLuv</span>
-        </div>
-        <div
-          class="Color-option"
-          @click="letters = !letters"
-          :class="{ '--isInactive': !letters }"
-        >
-          <letters-icon class="Color-optionIcon" />
-          <span for="hsluv-option" class="Color-optionLabel">Letters</span>
-        </div>
-        <div class="Color-option --isDivider">|</div>
-        <div class="Color-option">
-          <external-icon class="Color-optionIcon" />
-          <router-link to="/crossgrid" class="Color-optionLabel" target="_blank"
-            >CrossGrid</router-link
+        <div class="CrossGrid-optionsGroup">
+          <div
+            class="Color-option"
+            @click="hsluv = !hsluv"
+            :class="{ '--isInactive': !hsluv }"
           >
+            <colorspace-icon class="Color-optionIcon" />
+            <span class="Color-optionLabel">HSLuv</span>
+          </div>
+          <div
+            class="Color-option"
+            @click="letters = !letters"
+            :class="{ '--isInactive': !letters }"
+          >
+            <letters-icon class="Color-optionIcon" />
+            <span class="Color-optionLabel">Letters</span>
+          </div>
         </div>
-        <div class="Color-option">
-          <share-icon class="Color-optionIcon" />
-          <span class="Color-optionLabel" @click="copyShareLink">{{
-            shareLinkText
-          }}</span>
+        <div class="CrossGrid-optionsGroup">
+          <div class="Color-option">
+            <external-icon class="Color-optionIcon" />
+            <router-link
+              to="/crossgrid"
+              class="Color-optionLabel"
+              target="_blank"
+              >CrossGrid</router-link
+            >
+          </div>
+          <div class="Color-option">
+            <share-icon class="Color-optionIcon" />
+            <span class="Color-optionLabel" @click="copyShareLink">{{
+              shareLinkText
+            }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -214,8 +220,8 @@ export default {
   color: var(--color);
 
   &.--isDark {
-    --color: #fff;
-    --inverted: #000;
+    --color: #{$light};
+    --inverted: #{$dark};
     --invalid: rgb(255, 45, 45);
   }
 
@@ -247,6 +253,20 @@ export default {
     text-align: center;
 
     cursor: pointer;
+  }
+
+  &-optionsGroup {
+    display: flex;
+    margin: {
+      top: 0.5em;
+      right: 2em;
+      bottom: 0.5em;
+      left: 0;
+    }
+
+    &:last-of-type {
+      margin-right: 0;
+    }
   }
 
   &-option {

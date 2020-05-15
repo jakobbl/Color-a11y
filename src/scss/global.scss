@@ -1,8 +1,11 @@
 @import 'font-face';
 
 
+$light: #fafafa;
+$dark: #222;
+
 :root {
-  --color: #000;
-  --inverted: #fff;
+  --color: #{$dark};
+  --inverted: #{$light};
   --invalid: rgb(255, 70, 70);
 }

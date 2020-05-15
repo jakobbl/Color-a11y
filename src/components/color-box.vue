@@ -20,23 +20,33 @@
     </div>
     <div class="ColorBox-score">
       <p class="ColorBox-rating">{{ score }}</p>
-      <span class="ColorBox-ratingAA" :class="minScore">AA</span>
-      <span class="ColorBox-ratingAAA" :class="extendedScore">AAA</span>
+      <score-box
+        class="ColorBox-ratingAA"
+        :score="score"
+        :threshold="4.5"
+        name="AA"
+      />
+      <score-box
+        class="ColorBox-ratingAA"
+        :score="score"
+        :threshold="7"
+        name="AAA"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { hex } from 'wcag-contrast';
-
-import { twoDecimals } from '@/utils';
+import { wcagScore } from '@/utils';
 import letters from '@/components/icons/letters';
+import scoreBox from '@/components/score-box';
 
 export default {
   name: 'color-box',
   props: ['background', 'color', 'active'],
   components: {
-    letters
+    letters,
+    scoreBox
   },
   data() {
     return {};
@@ -48,26 +58,7 @@ export default {
       }
     },
     score() {
-      const contrast = hex(this.background, this.color);
-      const rounded = twoDecimals(contrast);
-      return rounded;
-    },
-    minScore() {
-      return {
-        '--isSuccess': this.score >= 4.5
-      };
-    },
-    extendedScore() {
-      return {
-        '--isSuccess': this.score >= 7
-      };
-    },
-    needsContrastBorder() {
-      if (this.score < 1.35) {
-        return true;
-      } else {
-        return false;
-      }
+      return wcagScore(this.background, this.color);
     }
   },
   methods: {
@@ -166,42 +157,6 @@ export default {
 
   &-rating {
     margin: 0.25em 0;
-  }
-
-  &-ratingAA,
-  &-ratingAAA {
-    @include space-mono;
-    display: inline-block;
-    box-sizing: border-box;
-    width: 6em;
-    margin-right: 1em;
-    padding: 0.25em 0.75em;
-
-    color: var(--color);
-    font-weight: bold;
-    font-size: max(12px, 0.8vw);
-
-    border: 2px solid var(--color);
-    opacity: 0.57;
-
-    transition-duration: 0.5s;
-    transition-property: opacity, color, background-color;
-
-    &::after {
-      content: ' X';
-    }
-
-    &.--isSuccess {
-      color: var(--inverted);
-
-      background: var(--color);
-      transform-origin: right bottom;
-      opacity: 1;
-
-      &::after {
-        content: ' OK';
-      }
-    }
   }
 
   &-ratingAA {

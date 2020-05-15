@@ -7,6 +7,7 @@ const boxColor = randomColor();
 export const state = {
   hsluv: true,
   letters: false,
+  icons: false,
   background: bgColor,
   colorBoxes: [boxColor]
 };
