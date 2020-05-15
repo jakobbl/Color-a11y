@@ -9,6 +9,9 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: 'black',
 
     // configure the workbox plugin
-    workboxPluginMode: 'GenerateSW'
+    workboxPluginMode: 'GenerateSW',
+    workboxOptions: {
+      exclude: ['_redirects']
+    }
   }
 };
