@@ -9,6 +9,7 @@
         :value="valueClamp"
         @input="handleInput"
         @change="formatInput"
+        :size="inputSize"
       />
       <span>{{ suffix }}</span>
     </div>
@@ -34,6 +35,12 @@ export default {
       valueClamp: null,
       min: 0
     };
+  },
+  computed: {
+    inputSize() {
+      const n = this.max.toString().length;
+      return n + 2;
+    }
   },
   methods: {
     handleInput(event) {
