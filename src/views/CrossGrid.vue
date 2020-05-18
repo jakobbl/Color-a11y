@@ -42,14 +42,30 @@
         </div>
       </div>
     </div>
-    <div class="CrossGrid-grid" :style="{ '--cols': boxes.length }">
+    <div
+      class="CrossGrid-grid"
+      :class="{
+        '--isScrollableLeft': hasItemsToTheLeft,
+        '--isScrollableRight': hasItemsToTheRight
+      }"
+    >
       <div
-        class="CrossGrid-gridBox"
-        v-for="(box, index) in boxGrid"
-        :key="`box-${index}-${box}`"
-        :class="{ '--isBlank': box[0] == box[1] }"
+        class="CrossGrid-scroller"
+        :style="{ '--cols': boxes.length }"
+        ref="grid"
       >
-        <cross-box class="CrossGrid-crossBox" :back="box[0]" :front="box[1]" />
+        <div
+          class="CrossGrid-gridBox"
+          v-for="(box, index) in boxGrid"
+          :key="`box-${index}-${box}`"
+          :class="{ '--isBlank': box[0] == box[1] }"
+        >
+          <cross-box
+            class="CrossGrid-crossBox"
+            :back="box[0]"
+            :front="box[1]"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -73,7 +89,10 @@ export default {
   data() {
     return {
       darkMode: false,
-      icon: ''
+      icon: '',
+      hasItemsToTheLeft: false,
+      hasItemsToTheRight: false,
+      resizeObserver: undefined
     };
   },
   computed: {
@@ -120,10 +139,42 @@ export default {
         'iceSkating'
       ];
       return icons[Math.floor(Math.random() * icons.length)];
+    },
+    setScrollAffordance(event) {
+      window.requestAnimationFrame(() => {
+        const scrolled = event.target.scrollLeft;
+        const offsetWidth = event.target.offsetWidth;
+        const containerWidth = event.target.scrollWidth;
+
+        if (scrolled >= containerWidth * 0.15) {
+          this.hasItemsToTheLeft = true;
+        }
+
+        if (scrolled < containerWidth * 0.15) {
+          this.hasItemsToTheLeft = false;
+        }
+
+        if (scrolled + offsetWidth < containerWidth * 0.85) {
+          this.hasItemsToTheRight = true;
+        }
+
+        if (scrolled + offsetWidth >= containerWidth * 0.85) {
+          this.hasItemsToTheRight = false;
+        }
+      });
     }
   },
   mounted() {
     this.icon = this.getRandomIcon();
+    this.$refs.grid.addEventListener('scroll', this.setScrollAffordance);
+    this.resizeObserver = new ResizeObserver(() => {
+      this.setScrollAffordance({ target: this.$refs.grid });
+    });
+    this.resizeObserver.observe(this.$refs.grid);
+  },
+  beforeDestroy() {
+    this.$refs.grid.removeEventListener('scroll', this.setScrollAffordance);
+    this.resizeObserver.unobserve(this.$refs.grid);
   }
 };
 </script>
@@ -234,17 +285,65 @@ export default {
   }
 
   &-grid {
-    display: grid;
+    position: relative;
+
     flex: 1;
-    grid-gap: 4px;
-    grid-template-columns: repeat(var(--cols), 1fr);
-    width: 100%;
-    max-width: 1200px;
+    width: calc(100% - (2 * 2rem));
     margin: 0 auto;
+    padding: 0 2rem;
+
+    &::before,
+    &::after {
+      position: fixed;
+      top: 55%;
+      z-index: 999;
+
+      width: 0.25em;
+      height: 40vh;
+
+      background: currentColor;
+
+      transform: translateY(-50%) scaleY(0);
+
+      opacity: 0.85;
+
+      transition: transform 0.25s;
+
+      content: '';
+
+      @media (max-width: 800px) {
+        display: none;
+      }
+    }
+
+    &::before {
+      left: 1.5em;
+    }
+
+    &.--isScrollableLeft::before {
+      transform: translateY(-50%) scaleY(1);
+    }
+
+    &::after {
+      right: 1.5em;
+    }
+
+    &.--isScrollableRight::after {
+      transform: translateY(-50%) scaleY(1);
+    }
+  }
+
+  &-scroller {
+    display: grid;
+    grid-gap: 0.5em;
+    grid-template-columns: repeat(var(--cols), minmax(200px, 400px));
+    overflow: auto;
 
     @media (max-width: 800px) {
-      grid-gap: 2vw;
+      flex: unset;
+      grid-gap: 1em;
       grid-template-columns: repeat(2, 1fr);
+      width: 100%;
     }
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="CrossBox">
+  <div class="CrossBox" :class="{ '--isSmall': isSmall }" ref="box">
     <div
       class="CrossBox-boxes"
       :class="{ '--isBlank': blank }"
@@ -56,6 +56,12 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      resizeObserver: undefined,
+      isSmall: true
+    };
+  },
   computed: {
     blank() {
       return this.back == this.front;
@@ -69,6 +75,19 @@ export default {
     score() {
       return wcagScore(this.back, this.front);
     }
+  },
+  methods: {
+    elementQuery(entries) {
+      const el = entries[0];
+      this.isSmall = el.contentRect.width <= 250;
+    }
+  },
+  mounted() {
+    this.resizeObserver = new ResizeObserver(this.elementQuery);
+    this.resizeObserver.observe(this.$refs.box);
+  },
+  beforeDestroy() {
+    this.resizeObserver.unobserve(this.$refs.box);
   }
 };
 </script>
@@ -130,7 +149,7 @@ export default {
     align-items: center;
     justify-content: space-between;
 
-    padding: 0.75em 2em;
+    padding: 5%;
 
     color: var(--inverted);
     font-size: 85%;
@@ -140,12 +159,20 @@ export default {
 
   .Scorebox {
     filter: invert(100%);
+  }
 
-    @media (max-width: 1200px) {
+  &.--isSmall {
+    .Scorebox {
       width: unset;
       padding: 0;
 
       border: 0;
+
+      &.--isSuccess {
+        color: var(--color);
+
+        background: none;
+      }
     }
   }
 }
