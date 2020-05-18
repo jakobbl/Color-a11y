@@ -168,13 +168,26 @@ export default {
     },
     selectColorBox(index) {
       if (this.activeColorBox === index) {
+        document.removeEventListener('keydown', this.escapeBoxInput);
         this.activeColorBox = -1;
         this.$refs.colorPicker.setTo(this.background);
       } else {
         this.activeColorBox = index;
         this.$refs.colorPicker.setTo(this.colorBoxes[index]);
+        this.oldColor = this.colorBoxes[index];
+        document.addEventListener('keydown', this.escapeBoxInput, {
+          once: true
+        });
       }
       this.updateColorBoxMeta();
+    },
+    escapeBoxInput() {
+      this.$store.commit('changeBox', {
+        index: this.activeColorBox,
+        hex: this.oldColor
+      });
+      this.oldColor = '';
+      this.selectColorBox(this.activeColorBox);
     },
     colorChange(event) {
       this.shareLinkText = 'Share';
