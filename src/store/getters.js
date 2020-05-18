@@ -1,3 +1,4 @@
+// Get both background and colorBoxes colors
 export const getters = {
   allColors(state) {
     let colorBoxes = state.colorBoxes.slice(0);

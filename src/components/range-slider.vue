@@ -29,7 +29,22 @@
 <script>
 export default {
   name: 'range-slider',
-  props: ['value', 'title', 'max', 'suffix'],
+  props: {
+    value: {
+      type: Number,
+      required: true
+    },
+    title: {
+      type: String
+    },
+    max: {
+      type: Number,
+      required: true
+    },
+    suffix: {
+      type: String
+    }
+  },
   data() {
     return {
       valueClamp: null,
@@ -37,12 +52,14 @@ export default {
     };
   },
   computed: {
+    // The number for the input size attribute
     inputSize() {
       const n = this.max.toString().length;
       return n + 2;
     }
   },
   methods: {
+    // Handle input value
     handleInput(event) {
       const input = event.target.value.replace(',', '.');
       let val = parseFloat(input).toFixed(1);
@@ -51,6 +68,7 @@ export default {
       this.valueClamp = val;
       this.$emit('input', val);
     },
+    // "Pretty-print" the input value
     formatInput(event) {
       const input = event.target.value.replace(',', '.');
       let val = parseFloat(input).toFixed(1);

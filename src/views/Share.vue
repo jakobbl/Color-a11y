@@ -21,24 +21,31 @@ import { isValidHex } from '@/utils';
 export default {
   data() {
     return {
+      // Error state for templating
       error: false
     };
   },
   mounted() {
+    // Share url pattern is .../share/background/box1,box2,box3,box4
+    // Color must be prefixed within Vue data, but NOT in the URL
     const bg = '#' + this.$route.params.background;
     let colors = this.$route.params.colors.split(',').map(color => '#' + color);
 
-    // Check for valid hexes
+    /* Check for valid background hex value
+       OR if no colors was in the URL */
     if (!isValidHex(bg) || colors.length == 0) {
+      // If not set error state and return
       this.error = true;
       return;
     }
 
+    // Check that every value provided in boxes is a valid hexcode
     if (!colors.every(color => isValidHex(color))) {
       this.error = true;
       return;
     }
 
+    // All validation checks passed, commit data to store, and navigate to front page
     this.$store.commit('setBackground', bg);
     this.$store.commit('overrideBoxesTo', colors);
     this.$router.push('/');

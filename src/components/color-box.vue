@@ -16,7 +16,7 @@
         :style="[{ background: color }]"
         v-else
       ></div>
-      <div class="ColorBox-remove" @click.stop="remove"><span>X</span></div>
+      <div class="ColorBox-remove" @click.stop="emitRemove"><span>X</span></div>
     </div>
     <div class="ColorBox-score">
       <p class="ColorBox-rating">{{ score }}</p>
@@ -43,26 +43,39 @@ import scoreBox from '@/components/score-box';
 
 export default {
   name: 'color-box',
-  props: ['background', 'color', 'active'],
+  props: {
+    background: {
+      type: String,
+      required: true
+    },
+    color: {
+      type: String,
+      required: true
+    },
+    active: {
+      type: Boolean,
+      required: true
+    }
+  },
   components: {
     letters,
     scoreBox
   },
-  data() {
-    return {};
-  },
   computed: {
+    // Vuex
     letters: {
       get() {
         return this.$store.state.letters;
       }
     },
+    // Calculate WCAG color contrast score between the background and the foreground color
     score() {
       return wcagScore(this.background, this.color);
     }
   },
   methods: {
-    remove() {
+    // Emit remove button has been clicked
+    emitRemove() {
       this.$emit('remove');
     }
   }
@@ -88,6 +101,7 @@ export default {
     border-radius: 100%;
   }
 
+  // Foreground color box active state
   &-box.--isActive &-foreground {
     border-color: var(--color);
   }

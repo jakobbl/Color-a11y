@@ -1,3 +1,5 @@
+// Decoupled import mixin for less clutter
+
 import butterfly from '@/components/icons/lorry/butterfly';
 import clock from '@/components/icons/lorry/clock';
 import controller from '@/components/icons/lorry/controller';

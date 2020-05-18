@@ -44,7 +44,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="Color-content"> -->
     <div class="Color-colorBoxes">
       <transition-group name="ColorBoxList" tag="div" appear>
         <color-box
@@ -53,7 +52,7 @@
           :background="background"
           :color="box.color"
           :active="box.active"
-          @click.native="selectColorBox(index)"
+          @click.native="toggleColorBox(index)"
           @remove="removeColorBox(index)"
           class="Color-colorBox"
           :class="{
@@ -70,7 +69,6 @@
     />
     <button class="Color-colorBoxAdd" @click="addColorBox">Add color</button>
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -96,13 +94,18 @@ export default {
   },
   data() {
     return {
+      // Computed meta object for templating the boxes
       colorBoxesMeta: [],
+      // The active box index, -1 is the background
       activeColorBox: -1,
+      // Darkmode
       isDark: false,
+      // Share link button text
       shareLinkText: 'Share'
     };
   },
   computed: {
+    // Vuex
     hsluv: {
       get() {
         return this.$store.state.hsluv;
@@ -134,11 +137,15 @@ export default {
     }
   },
   mounted() {
+    // Calculate if the current view needs dark mode on render
     this.isDark = needsDarkMode(this.background);
+    // Create the colorBoxMeta object
     this.updateColorBoxMeta();
+    // Set the color pickers values to the current background
     this.$refs.colorPicker.setTo(this.background);
   },
   methods: {
+    // Re-calculate the colorBoxMeta object
     updateColorBoxMeta() {
       this.colorBoxesMeta = this.colorBoxes.map((color, index) => {
         return {
@@ -147,17 +154,22 @@ export default {
         };
       });
     },
+    // Create a new box
     addColorBox() {
+      // Get a random color
       let newColor = randomColor(this.isDark);
       this.$store.commit('addBox', newColor);
+      // After Vue renders the new box
       this.$nextTick(() => {
         this.updateColorBoxMeta();
+        // Wait a litte (125ms), so that everything doesn't (visually) happen at once
         setTimeout(() => {
           this.activeColorBox = this.colorBoxes.length - 1;
           this.$refs.colorPicker.setTo(newColor);
         }, 125);
       });
     },
+    // Remove a box from the app
     removeColorBox(index) {
       this.activeColorBox = -1;
       this.$refs.colorPicker.setTo(this.background);
@@ -166,31 +178,44 @@ export default {
         this.updateColorBoxMeta();
       });
     },
-    selectColorBox(index) {
+    // Toggle the selected box active state
+    toggleColorBox(index) {
+      // If active, deselect box
       if (this.activeColorBox === index) {
         document.removeEventListener('keydown', this.escapeBoxInput);
+        // Make the background active
         this.activeColorBox = -1;
         this.$refs.colorPicker.setTo(this.background);
       } else {
+        // Set the box to active
         this.activeColorBox = index;
+        // Update state values to the now active box
         this.$refs.colorPicker.setTo(this.colorBoxes[index]);
+
+        // Escape undoes input func
         this.oldColor = this.colorBoxes[index];
         document.addEventListener('keydown', this.escapeBoxInput, {
           once: true
         });
       }
+      // Finally update the colorBoxMeta object
       this.updateColorBoxMeta();
     },
     escapeBoxInput() {
+      // Commit the old value of the box to the store
       this.$store.commit('changeBox', {
         index: this.activeColorBox,
         hex: this.oldColor
       });
       this.oldColor = '';
-      this.selectColorBox(this.activeColorBox);
+      // Run toggleColorBox (it will always deselect the box as this function only runs when it's active)
+      this.toggleColorBox(this.activeColorBox);
     },
+    // When the color state is changed
     colorChange(event) {
+      // Now that color state is changed, the share link is no longer valid, therefore revert back to default
       this.shareLinkText = 'Share';
+      // The change is on a box
       if (this.activeColorBox >= 0) {
         this.$store.commit('changeBox', {
           index: this.activeColorBox,
@@ -198,20 +223,25 @@ export default {
         });
         this.updateColorBoxMeta();
       } else {
+        // The change is to the background
         this.$store.commit('setBackground', event.hex);
         this.isDark = needsDarkMode(event.hex);
       }
     },
     shouldFadeOut(activeState) {
+      // Is a box selected, and is passed in box state active?
       return this.activeColorBox !== -1 && !activeState;
     },
     copyShareLink() {
+      // Generate sharelink
       const boxes = this.colorBoxes
         .map(color => color.replace(/#*/g, ''))
         .join(',');
       const params = `${this.background.replace(/#*/g, '')}/${boxes}`;
       const link = `${window.location.origin}/share/${params}`;
+      // Copy link to user's clipboard
       clipboard.writeText(link);
+      // Update UI text to show that the action is complete
       this.shareLinkText = 'Copied!';
     }
   }
@@ -232,6 +262,7 @@ export default {
 
   color: var(--color);
 
+  // Darkmode color palette
   &.--isDark {
     --color: #{$light};
     --inverted: #{$dark};
@@ -330,12 +361,6 @@ export default {
     }
   }
 
-  // &-content {
-  //   flex: 1;
-
-  //   text-align: center;
-  // }
-
   &-picker {
     width: 100%;
     margin: 3vmin 0;
@@ -387,6 +412,7 @@ export default {
   }
 }
 
+// Vue transition classes
 .ColorBoxList {
   &-enter-active {
     transition: opacity 0.5s, transform 0.35s;

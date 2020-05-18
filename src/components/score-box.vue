@@ -21,6 +21,7 @@ export default {
     }
   },
   computed: {
+    // When the threshold score is met
     success() {
       return this.score >= this.threshold;
     }

@@ -10,10 +10,12 @@ import { getters } from './getters';
 
 Vue.use(Vuex);
 
+// Create a persistent store storage
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage
 });
 
+// Sync mutations between tabs and windows
 const mutationSharer = createMutationsSharer({
   predicate: [
     'setHSLuv',

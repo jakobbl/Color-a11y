@@ -1,3 +1,4 @@
 TODO: Multiple storages
 TODO: Storage chooser
 TODO: Share skabe et nyt storage, ikke overskriver
+TODO: Rewrite scss/_input-range.scss til mere moderne scss

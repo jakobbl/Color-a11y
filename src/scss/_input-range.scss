@@ -1,16 +1,22 @@
+// Style parameters
+// Sizes
 $thumb-height: 20px;
 $thumb-border-width: 4px;
 $track-height: 4px;
+// Colors + styles
 $thumb-color: currentColor;
 $active-thumb-color: $thumb-color;
 $track-color: $thumb-color;
 $background: var(--background);
+$inactive-opacity: 0.87;
+// Transitions
 $thumb-active-transform: 1.35;
 $transition: background 0.5s,
   border 0s,
   opacity 0.5s,
   transform 0.25s;
 
+// Styling of range input still requires vendor-specific pseudo selectors
 /* stylelint-disable selector-pseudo-element-no-unknown */
 
 .Range-input {
@@ -32,7 +38,7 @@ $transition: background 0.5s,
 
       background: $track-color;
       border-radius: 0;
-      opacity: 0.87;
+      opacity: $inactive-opacity;
 
       transition: $transition;
     }
@@ -68,7 +74,7 @@ $transition: background 0.5s,
 
       background: $thumb-color;
       border-radius: $track-height;
-      opacity: 0.87;
+      opacity: $inactive-opacity;
 
     }
 
@@ -99,7 +105,7 @@ $transition: background 0.5s,
       background: $track-color;
       border: 0;
       border-radius: 0;
-      opacity: 0.87;
+      opacity: $inactive-opacity;
 
     }
 

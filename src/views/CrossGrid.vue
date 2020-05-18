@@ -88,14 +88,18 @@ export default {
   },
   data() {
     return {
+      // Darkmode css-class switch
       darkMode: false,
+      // Icon component name for icons option
       icon: '',
+      // Scroll affordances
       hasItemsToTheLeft: false,
       hasItemsToTheRight: false,
       resizeObserver: undefined
     };
   },
   computed: {
+    // Vuex
     letters: {
       get() {
         return this.$store.state.letters;
@@ -116,19 +120,27 @@ export default {
     boxes() {
       return this.$store.getters.allColors;
     },
+    // Calculate the CrossGrid matrix
     boxGrid() {
       let grid = [];
+
+      // Rows
       for (let ir = 0; ir < this.boxes.length; ir += 1) {
         grid[ir] = [];
+        // Columns
         for (let ic = 0; ic < this.boxes.length; ic += 1) {
           grid[ir][ic] = [this.boxes[ir], this.boxes[ic]];
         }
       }
+      // Template excepts a 1D array
+      // i.e. [#fff, #000, #000, #fff], not [[#fff, #000], [#000, #fff]]
       return grid.flat();
     }
   },
   methods: {
+    // The random icon for icons option
     getRandomIcon() {
+      // Names for components in src/components/icons/Lorry
       const icons = [
         'butterfly',
         'clock',
@@ -140,20 +152,24 @@ export default {
       ];
       return icons[Math.floor(Math.random() * icons.length)];
     },
+    // Calculate if scroll affordances should be shown
     setScrollAffordance(event) {
       window.requestAnimationFrame(() => {
         const scrolled = event.target.scrollLeft;
         const offsetWidth = event.target.offsetWidth;
         const containerWidth = event.target.scrollWidth;
 
+        // Show affordance to left if the user is able to scroll at least 15% of the container's width to the left
         if (scrolled >= containerWidth * 0.15) {
           this.hasItemsToTheLeft = true;
         }
 
+        // Hide affordance to the left if not
         if (scrolled < containerWidth * 0.15) {
           this.hasItemsToTheLeft = false;
         }
 
+        // Show affordance to right if the user is able to scroll at least 15% of the container's width to the right
         if (scrolled + offsetWidth < containerWidth * 0.85) {
           this.hasItemsToTheRight = true;
         }
@@ -165,7 +181,9 @@ export default {
     }
   },
   mounted() {
+    // Set the random icon on render
     this.icon = this.getRandomIcon();
+    // Scroll affordance observer
     this.$refs.grid.addEventListener('scroll', this.setScrollAffordance);
     this.resizeObserver = new ResizeObserver(() => {
       this.setScrollAffordance({ target: this.$refs.grid });
@@ -173,6 +191,7 @@ export default {
     this.resizeObserver.observe(this.$refs.grid);
   },
   beforeDestroy() {
+    // Cleanup scroll affordance observer
     this.$refs.grid.removeEventListener('scroll', this.setScrollAffordance);
     this.resizeObserver.unobserve(this.$refs.grid);
   }
@@ -195,6 +214,7 @@ export default {
 
   transition: background-color 0.5s;
 
+  // Darkmode color palette
   &.--isDark {
     --color: #{$light};
     --inverted: #{$dark};
@@ -250,12 +270,14 @@ export default {
     justify-content: center;
     margin-right: 2em;
 
+    // State of the option is unchecked / false
     &.--isInactive {
       text-decoration: line-through;
 
       opacity: 0.57;
     }
 
+    // Divider between option groups
     &.--isDivider {
       margin-left: 2em;
 
@@ -292,6 +314,7 @@ export default {
     margin: 0 auto;
     padding: 0 2rem;
 
+    // Scroll affordances
     &::before,
     &::after {
       position: fixed;
@@ -316,18 +339,22 @@ export default {
       }
     }
 
+    // Affordance left
     &::before {
       left: 1.5em;
     }
 
-    &.--isScrollableLeft::before {
-      transform: translateY(-50%) scaleY(1);
-    }
-
+    // Affordance right
     &::after {
       right: 1.5em;
     }
 
+    // Show the left scroll affordance
+    &.--isScrollableLeft::before {
+      transform: translateY(-50%) scaleY(1);
+    }
+
+    // Show the right scroll affordance
     &.--isScrollableRight::after {
       transform: translateY(-50%) scaleY(1);
     }
@@ -336,9 +363,11 @@ export default {
   &-scroller {
     display: grid;
     grid-gap: 0.5em;
+    // Make the grid be x columns wide, where x is the number of rows in the CrossGrid
     grid-template-columns: repeat(var(--cols), minmax(200px, 400px));
     overflow: auto;
 
+    // Fixed 2 column grid on smaller devices
     @media (max-width: 800px) {
       flex: unset;
       grid-gap: 1em;
@@ -350,6 +379,7 @@ export default {
   &-gridBox {
     position: relative;
 
+    // Aspect ratio trick (1:1)
     &::before {
       display: block;
       width: 100%;
@@ -358,6 +388,7 @@ export default {
       content: '';
     }
 
+    // Hide the blank crossBoxes on smaller devices
     &.--isBlank {
       @media (max-width: 800px) {
         display: none;

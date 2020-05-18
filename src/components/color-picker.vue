@@ -58,13 +58,16 @@ export default {
   },
   data() {
     return {
+      // Slider values
       hue: undefined,
       saturation: undefined,
       lightness: undefined,
+      // Input field value
       hex: null
     };
   },
   computed: {
+    // Placeholder text for hex input
     placeholder() {
       if (this.hex) {
         return this.hex;
@@ -72,6 +75,7 @@ export default {
         return '#aabbcc';
       }
     },
+    // Vuex
     hsluv: {
       get() {
         return this.$store.state.hsluv;
@@ -79,6 +83,7 @@ export default {
     }
   },
   methods: {
+    // Set slider values
     setHue(event) {
       this.hue = event;
       this.updateHex();
@@ -91,9 +96,11 @@ export default {
       this.lightness = event;
       this.updateHex();
     },
+    // Calculate the hex code
     updateHex() {
       let hex;
 
+      // Check for HSLuv UI option
       if (this.hsluv) {
         hex = hsluvToHex([this.hue, this.saturation, this.lightness]);
       } else {
@@ -103,8 +110,9 @@ export default {
 
       this.hex = hex;
     },
+    // Calculate the HSL values
     updateHSL(hex) {
-      // Early exit
+      // Early exit for non-valid hex code
       if (!isValidHex(hex)) return;
 
       let hsl;
@@ -114,11 +122,13 @@ export default {
         hsl = colorConvert.hex.hsl(hex);
       }
 
+      // Update slider values
       this.hex = hex;
       this.hue = hsl[0];
       this.saturation = hsl[1];
       this.lightness = hsl[2];
     },
+    // "Pretty-print" the hex code
     formatHex(event) {
       const input = event.target.value;
       const firstChar = input.slice(0, 1);
@@ -127,15 +137,18 @@ export default {
         this.updateHSL(newHex);
       }
     },
+    // Round the 1 decimal places
     rounded(value) {
       return Math.round(value * 10) / 10;
     },
+    // Override the sliders values from a provided hex code
     setTo(hex) {
       this.updateHSL(hex);
       this.hex = hex;
     }
   },
   watch: {
+    // Emit every time there a new hex code
     hex() {
       this.$emit('input', { hex: this.hex });
     }
@@ -171,6 +184,7 @@ export default {
     border: 2px solid transparent;
     border-bottom: 2px solid var(--color);
 
+    // Invalid state but does not have :focus
     &:invalid:not(:focus) {
       color: var(--color);
 

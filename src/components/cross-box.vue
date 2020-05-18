@@ -58,22 +58,26 @@ export default {
   },
   data() {
     return {
+      // Obsever and state element queries
       resizeObserver: undefined,
       isSmall: true
     };
   },
   computed: {
+    // The box compares two same colors, i.e. green on green
     blank() {
       return this.back == this.front;
     },
+    // WCAG color contrast score
+    score() {
+      return wcagScore(this.back, this.front);
+    },
+    // Vuex
     letters() {
       return this.$store.state.letters;
     },
     icons() {
       return this.$store.state.icons;
-    },
-    score() {
-      return wcagScore(this.back, this.front);
     }
   },
   methods: {
@@ -83,10 +87,12 @@ export default {
     }
   },
   mounted() {
+    // Create and observe for element queries
     this.resizeObserver = new ResizeObserver(this.elementQuery);
     this.resizeObserver.observe(this.$refs.box);
   },
   beforeDestroy() {
+    // Cleanup element queries observer
     this.resizeObserver.unobserve(this.$refs.box);
   }
 };
@@ -120,6 +126,7 @@ export default {
 
     transform: translate(-50%, -50%);
 
+    // Aspect ratio trick (1:1)
     &::before {
       display: block;
       width: 100%;
@@ -131,8 +138,6 @@ export default {
 
   &-frontBox {
     position: absolute;
-    // top: 50%;
-    // left: 50%;
     top: 0;
     left: 0;
 
@@ -157,6 +162,7 @@ export default {
     background-color: var(--color);
   }
 
+  // All the Scoreboxs color should be the inverse, so just do the easy thing and invert it!
   .Scorebox {
     filter: invert(100%);
   }

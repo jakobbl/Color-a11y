@@ -13,20 +13,24 @@ export const mutations = {
   removeBox(state, index) {
     state.colorBoxes.splice(index, 1);
   },
+  // Override the complete array, no just a single element in it
   overrideBoxesTo(state, arr) {
     if (!Array.isArray(arr)) return;
     state.colorBoxes = arr;
   },
+  // UI options
   setHSLuv(state, value) {
     state.hsluv = value;
   },
   setLetters(state, value) {
+    // Only one of icons or letter can be active
     if (value === true) {
       state.icons = false;
     }
     state.letters = value;
   },
   setIcons(state, value) {
+    // Only one of icons or letter can be active
     if (value === true) {
       state.letters = false;
     }
