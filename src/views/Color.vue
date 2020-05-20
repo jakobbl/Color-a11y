@@ -194,14 +194,13 @@ export default {
 
         // Escape undoes input func
         this.oldColor = this.colorBoxes[index];
-        document.addEventListener('keydown', this.escapeBoxInput, {
-          once: true
-        });
+        document.addEventListener('keydown', this.escapeBoxInput);
       }
       // Finally update the colorBoxMeta object
       this.updateColorBoxMeta();
     },
-    escapeBoxInput() {
+    escapeBoxInput(event) {
+      if (event.code !== 'Escape') return;
       // Commit the old value of the box to the store
       this.$store.commit('changeBox', {
         index: this.activeColorBox,
